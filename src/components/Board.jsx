@@ -12,6 +12,7 @@ export const Board = () => {
     const[guesses , setGuesses] = useState(new Array(6).fill(null))
     const[currentGuess , setCurrentGuess] = useState('')
     const [isGameOver , setIsGameOver] = useState(false)
+    const [trial , setTrial] = useState(6)
 
     useEffect(()=>{
         const handleKey = (e) => {
@@ -33,6 +34,7 @@ export const Board = () => {
                 newGuesses[guesses.findIndex((val)=> val==null)] = currentGuess
                 setGuesses(newGuesses)
                 setCurrentGuess('')
+                setTrial(prev => prev - 1)
                 const isCorrect = solution === currentGuess
                 if(isCorrect){
                     setIsGameOver(true)
@@ -52,25 +54,27 @@ export const Board = () => {
     
     useEffect(()=>{
         const fetchWord = async()=>{
-            const res = await fetch("https://cfwordleserver.shubhamthesingh21.workers.dev/allwords")
+            const id = Math.floor(Math.random()*350)
+            const res = await fetch(`https://cfwordleserver.shubhamthesingh21.workers.dev/word/${id}`)
             const finalRes = await res.json()
-            const word = finalRes.allwords[Math.floor(Math.random()*finalRes.allwords.length)]
-            // console.log(word)
+            const word = finalRes.word
+            console.log(word)
             setSolution(word)
         }
 
         fetchWord()
     },[])
 
-    useEffect(()=>{
-        if(!guesses.includes(null)){
-            setIsGameOver(true)
-        }
-    },[guesses])
+    // useEffect(()=>{
+    //     if(!guesses.includes(null)){
+    //         setIsGameOver(true)
+    //     }
+    //     console.log(trial)
+    // },[guesses])
 
     return(
-        <div className="h-1/2 w-1/2 flex flex-col justify-center items-center">
-            <div className="h-93 w-80 flex flex-col gap-4">
+        <div className="h-full w-1/2 flex flex-col justify-center items-center">
+            <div className="h-93 w-80 flex flex-col gap-4 mb-10">
                 {
                     guesses.map((guess , i)=>{
                         const isCurrentGuess = i === guesses.findIndex(val => val == null)
@@ -81,9 +85,14 @@ export const Board = () => {
                     })
                 }
             </div>
-            {isGameOver && (
-                <div className="h-10 w-full text-4xl font-bold flex justify-center absolute bottom-20">
+            {!trial && (
+                <div className="h-10 w-full text-4xl font-bold flex justify-center mt-5">
                     <div>Correct Word is : <span className="uppercase">{solution}</span></div>
+                </div>
+            )}
+            {isGameOver && (
+                <div className="h-10 w-full text-4xl font-bold flex justify-center mt-5">
+                    <div>Good Job !! Sybau🥀</div>
                 </div>
             )}
         </div>
