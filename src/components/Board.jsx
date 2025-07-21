@@ -74,7 +74,10 @@ export const Board = () => {
 
     return(
         <div className="h-full w-1/2 flex flex-col justify-center items-center">
-            <div className="h-93 w-80 flex flex-col gap-4 mb-10">
+
+      <div className = 'font-[Cartograph_CF] -translate-x-5 -translate-y-5 text-[#b59f3b]  text-[50px]'> Wordle </div>
+
+            <div className="h-93 w-80 flex flex-col gap-3 mb-10">
                 {
                     guesses.map((guess , i)=>{
                         const isCurrentGuess = i === guesses.findIndex(val => val == null)
@@ -84,17 +87,26 @@ export const Board = () => {
                                 />
                     })
                 }
-            </div>
+            </div> 
+
+            <button 
+                className='bg-[#538d4e] w-30 h-10 -translate-x-5 -translate-y-5 rounded-2xl text-white hover:cursor-pointer'
+                onClick={()=>window.location.reload(true)}
+                >Replay
+            </button>
+
             {!trial && (
-                <div className="h-10 w-full text-4xl font-bold flex justify-center mt-5">
+                <div className="h-10 lg:text-[20px] -translate-x-5 btranslate-y-5 w-full text-xl font-bold text-white flex justify-center mt-5">
                     <div>Correct Word is : <span className="uppercase">{solution}</span></div>
                 </div>
             )}
             {isGameOver && (
-                <div className="h-10 w-full text-4xl font-bold flex justify-center mt-5">
+                <div className="h-10 w-full text-4xl -translate-x-5 -translate-y-5 font-bold flex text-white justify-center mt-5">
                     <div>Good Job !! Sybau🥀</div>
                 </div>
             )}
+
+       
         </div>
     )
 }
