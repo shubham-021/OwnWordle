@@ -62,17 +62,30 @@ export const Board = () => {
         fetchWord()
     },[])
 
+    useEffect(()=>{
+        if(!guesses.includes(null)){
+            setIsGameOver(true)
+        }
+    },[guesses])
+
     return(
-        <div className="h-93 w-80 flex flex-col gap-4">
-            {
-                guesses.map((guess , i)=>{
-                    const isCurrentGuess = i === guesses.findIndex(val => val == null)
-                    return <Line key={i} guess={ isCurrentGuess ? currentGuess : guess ?? ''}
-                                solution={solution}
-                                isFinal = {!isCurrentGuess && guess != null}
-                            />
-                })
-            }
+        <div className="h-1/2 w-1/2 flex flex-col justify-center items-center">
+            <div className="h-93 w-80 flex flex-col gap-4">
+                {
+                    guesses.map((guess , i)=>{
+                        const isCurrentGuess = i === guesses.findIndex(val => val == null)
+                        return <Line key={i} guess={ isCurrentGuess ? currentGuess : guess ?? ''}
+                                    solution={solution}
+                                    isFinal = {!isCurrentGuess && guess != null}
+                                />
+                    })
+                }
+            </div>
+            {isGameOver && (
+                <div className="h-10 w-full text-4xl font-bold flex justify-center absolute bottom-20">
+                    <div>Correct Word is : <span className="uppercase">{solution}</span></div>
+                </div>
+            )}
         </div>
     )
 }
