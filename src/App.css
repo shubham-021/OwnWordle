@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'Cartograph CF';
+  src: url('./src/assets/Cartograph_CF.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'feather';
+  src: url('./src/assets/feather.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pop-animation {
+  animation: popIn 0.6s ease-in-out;
+}

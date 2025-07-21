@@ -12,6 +12,7 @@ export const Board = () => {
     const[guesses , setGuesses] = useState(new Array(6).fill(null))
     const[currentGuess , setCurrentGuess] = useState('')
     const [isGameOver , setIsGameOver] = useState(false)
+    const [trial , setTrial] = useState(6)
 
     useEffect(()=>{
         const handleKey = (e) => {
@@ -33,6 +34,7 @@ export const Board = () => {
                 newGuesses[guesses.findIndex((val)=> val==null)] = currentGuess
                 setGuesses(newGuesses)
                 setCurrentGuess('')
+                setTrial(prev => prev - 1)
                 const isCorrect = solution === currentGuess
                 if(isCorrect){
                     setIsGameOver(true)
@@ -52,27 +54,59 @@ export const Board = () => {
     
     useEffect(()=>{
         const fetchWord = async()=>{
-            const res = await fetch("https://cfwordleserver.shubhamthesingh21.workers.dev/allwords")
+            const id = Math.floor(Math.random()*350)
+            const res = await fetch(`https://cfwordleserver.shubhamthesingh21.workers.dev/word/${id}`)
             const finalRes = await res.json()
-            const word = finalRes.allwords[Math.floor(Math.random()*finalRes.allwords.length)]
-            // console.log(word)
+            const word = finalRes.word
+            console.log(word)
             setSolution(word)
         }
 
         fetchWord()
     },[])
 
+    // useEffect(()=>{
+    //     if(!guesses.includes(null)){
+    //         setIsGameOver(true)
+    //     }
+    //     console.log(trial)
+    // },[guesses])
+
     return(
-        <div className="h-93 w-80 flex flex-col gap-4">
-            {
-                guesses.map((guess , i)=>{
-                    const isCurrentGuess = i === guesses.findIndex(val => val == null)
-                    return <Line key={i} guess={ isCurrentGuess ? currentGuess : guess ?? ''}
-                                solution={solution}
-                                isFinal = {!isCurrentGuess && guess != null}
-                            />
-                })
-            }
+        <div className="h-full w-1/2 flex flex-col justify-center items-center">
+
+      <div className = 'font-[Cartograph_CF] -translate-x-5 -translate-y-5 text-[#b59f3b]  text-[50px]'> Wordle </div>
+
+            <div className="h-93 w-80 flex flex-col gap-3 mb-10">
+                {
+                    guesses.map((guess , i)=>{
+                        const isCurrentGuess = i === guesses.findIndex(val => val == null)
+                        return <Line key={i} guess={ isCurrentGuess ? currentGuess : guess ?? ''}
+                                    solution={solution}
+                                    isFinal = {!isCurrentGuess && guess != null}
+                                />
+                    })
+                }
+            </div> 
+
+            <button 
+                className='bg-[#538d4e] w-30 h-10 -translate-x-5 -translate-y-5 rounded-2xl text-white hover:cursor-pointer'
+                onClick={()=>window.location.reload(true)}
+                >Replay
+            </button>
+
+            {!trial && (
+                <div className="h-10 lg:text-[20px] -translate-x-5 btranslate-y-5 w-full text-xl font-bold text-white flex justify-center mt-5">
+                    <div>Correct Word is : <span className="uppercase">{solution}</span></div>
+                </div>
+            )}
+            {isGameOver && (
+                <div className="h-10 w-full text-4xl -translate-x-5 -translate-y-5 font-bold flex text-white justify-center mt-5">
+                    <div>Good Job !! Sybau🥀</div>
+                </div>
+            )}
+
+       
         </div>
     )
 }
