@@ -13,7 +13,7 @@ export const Board = () => {
     const[guesses , setGuesses] = useState(new Array(5).fill(null))
     const[currentGuess , setCurrentGuess] = useState('')
     const [isGameOver , setIsGameOver] = useState(false)
-    const [trial , setTrial] = useState(6)
+    const [trial , setTrial] = useState(5)
     const [usedLetters, setUsedLetters] = useState({}) // New state for tracking used letters
 
     const updateUsedLetters = useCallback((guess, solution) => {
@@ -42,6 +42,30 @@ export const Board = () => {
     }, [usedLetters])
 
 
+
+    const handleKeyboardClick = (key) => {
+    if (isGameOver) return
+    
+    if (key === 'BACKSPACE') {
+        setCurrentGuess(currentGuess.slice(0, -1))
+    } else if (key === 'ENTER') {
+        if (currentGuess.length !== 5) return
+        
+        const newGuesses = [...guesses]
+        newGuesses[guesses.findIndex((val) => val == null)] = currentGuess
+        setGuesses(newGuesses)
+        updateUsedLetters(currentGuess, solution)
+        setCurrentGuess('')
+        setTrial(prev => prev - 1)
+        
+        const isCorrect = solution === currentGuess
+        if (isCorrect) {
+            setIsGameOver(true)
+        }
+    } else if (currentGuess.length < 5) {
+        setCurrentGuess(prev => prev + key.toLowerCase())
+    }
+    }
 
 
     useEffect(()=>{
@@ -89,7 +113,7 @@ export const Board = () => {
             const res = await fetch(`https://cfwordleserver.shubhamthesingh21.workers.dev/word/${id}`)
             const finalRes = await res.json()
             const word = finalRes.word
-            console.log(word)
+            
             setSolution(word)
         }
 
@@ -106,7 +130,7 @@ export const Board = () => {
     return(
         <div className="h-full w-1/2 flex flex-col justify-center items-center">
 
-      <div className = 'font-[Cartograph_CF] -translate-x-5 -translate-y-5 text-[#b59f3b]  text-[50px]'> Wordle </div>
+      <div className = 'font-[JetBrainsMono] -translate-x-5 -translate-y-5 text-[#b59f3b]  text-[50px]'> Wordle </div>
 
             <div className="h-93 w-80 flex flex-col gap-3 mb-10">
                 {
@@ -120,17 +144,18 @@ export const Board = () => {
                 }
             </div> 
 
-            <Keyboard usedLetters={usedLetters}/>
+            <Keyboard usedLetters={usedLetters} 
+            onKeyClick={handleKeyboardClick}/>
 
             <button 
-                className='bg-[#538d4e] w-30 h-10 -translate-x-5 -translate-y-5 rounded-2xl text-white hover:cursor-pointer'
+                className='bg-[#6a6a6a] w-30 h-10 -translate-x-5 -translate-y-5 rounded-2xl text-white hover:cursor-pointer'
                 onClick={()=>window.location.reload(true)}
-                >Replay
+                >Play Again!
             </button>
 
             {!trial && (
                 <div className="h-10 lg:text-[20px] -translate-x-5 btranslate-y-5 w-full text-xl font-bold text-white flex justify-center mt-5">
-                    <div>Correct Word was : <span className="uppercase">{solution}</span></div>
+                    <div>Word : <span className="uppercase">{solution}</span></div>
                 </div>
             )}
 

@@ -3,7 +3,14 @@
 
 @font-face {
   font-family: 'Cartograph CF';
-  src: url('./src/assets/Cartograph_CF.otf') format('opentype');
+  src: url('./src/assets/Cartograph-reg.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'JetBrainsMono';
+  src: url('./src/assets/JetBrainsMono-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -32,4 +39,3 @@
 .pop-animation {
   animation: popIn 0.6s ease-in-out;
 }
-
