@@ -6,16 +6,26 @@ const KEYBOARD_ROWS = [
     ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACKSPACE']
 ]
 
-export const Keyboard = ({ usedLetters }) => {
+export const Keyboard = ({ usedLetters, onKeyClick }) => {
 
     const getKeyStyle = (key) => {
         if (key === 'ENTER' || key === 'BACKSPACE') {
-            return 'w-16 h-13' // Wider for special keys
+            return 'w-16 h-13 mt-3' 
         }
-        return 'w-10 h-13' // Same height as cells, but wider than cells
+        return 'w-10 h-13'
+    }
+
+
+    const handleClick = (key) => {
+        if (onKeyClick) {
+            onKeyClick(key)
+        }
     }
 
     const getKeyColor = (key) => {
+
+        if (key === 'ENTER') return 'bg-[#538d4e]'
+        if (key === 'BACKSPACE') return 'bg-[#bc5050]'
         
         const letterStatus = usedLetters[key.toLowerCase()]
         if (letterStatus === 'correct') {
@@ -30,13 +40,13 @@ export const Keyboard = ({ usedLetters }) => {
     }
 
     return (
-        <div className="flex flex-col  gap-2 -translate-y-10 -translate-x-5">
+        <div className="flex flex-col transform md:scale-100 lg:scale-125 gap-2 -translate-y-20 -translate-x-5">
             {KEYBOARD_ROWS.map((row, rowIndex) => (
                 <div key={rowIndex} className="flex gap-1 justify-center">
                     {row.map((key) => (
                         <button
                             key={key}
-                            // onClick={() => handleClick(key)}
+                            onClick={() => handleClick(key)}
                             className={clsx(
                                 getKeyStyle(key),
                                 getKeyColor(key),
@@ -48,6 +58,6 @@ export const Keyboard = ({ usedLetters }) => {
                     ))}
                 </div>
             ))}
-        </div>
+        </div>  
     )
 }
