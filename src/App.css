@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 @font-face {
   font-family: 'Cartograph CF';
   src: url('./src/assets/Cartograph_CF.otf') format('opentype');

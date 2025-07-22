@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Line } from "./Line"
+import { Keyboard } from "./Keyboard"
 
 export const Board = () => {
 
@@ -9,10 +10,39 @@ export const Board = () => {
     } , [])
 
     const [solution , setSolution] = useState('')
-    const[guesses , setGuesses] = useState(new Array(6).fill(null))
+    const[guesses , setGuesses] = useState(new Array(5).fill(null))
     const[currentGuess , setCurrentGuess] = useState('')
     const [isGameOver , setIsGameOver] = useState(false)
     const [trial , setTrial] = useState(6)
+    const [usedLetters, setUsedLetters] = useState({}) // New state for tracking used letters
+
+    const updateUsedLetters = useCallback((guess, solution) => {
+        const newUsedLetters = { ...usedLetters }
+        
+        for (let i = 0; i < guess.length; i++) {
+            const letter = guess[i].toLowerCase()
+            const solutionLetter = solution[i].toLowerCase()
+            
+            if (solutionLetter === letter) {
+                newUsedLetters[letter] = 'correct'
+            } else if (solution.toLowerCase().includes(letter)) {
+                // Only update to 'includes' if not already 'correct'
+                if (newUsedLetters[letter] !== 'correct') {
+                    newUsedLetters[letter] = 'includes'
+                }
+            } else {
+                // Only update to 'incorrect' if not already 'correct' or 'includes'
+                if (!newUsedLetters[letter]) {
+                    newUsedLetters[letter] = 'incorrect'
+                }
+            }
+        }
+        
+        setUsedLetters(newUsedLetters)
+    }, [usedLetters])
+
+
+
 
     useEffect(()=>{
         const handleKey = (e) => {
@@ -34,6 +64,7 @@ export const Board = () => {
                 newGuesses[guesses.findIndex((val)=> val==null)] = currentGuess
                 setGuesses(newGuesses)
                 setCurrentGuess('')
+                updateUsedLetters(currentGuess, solution)
                 setTrial(prev => prev - 1)
                 const isCorrect = solution === currentGuess
                 if(isCorrect){
@@ -50,7 +81,7 @@ export const Board = () => {
         window.addEventListener('keydown' , handleKey)
 
         return ()=>{window.removeEventListener('keydown' , handleKey)}
-    },[currentGuess , isGameOver , solution])
+    },[currentGuess , isGameOver , solution, updateUsedLetters])
     
     useEffect(()=>{
         const fetchWord = async()=>{
@@ -83,11 +114,13 @@ export const Board = () => {
                         const isCurrentGuess = i === guesses.findIndex(val => val == null)
                         return <Line key={i} guess={ isCurrentGuess ? currentGuess : guess ?? ''}
                                     solution={solution}
-                                    isFinal = {!isCurrentGuess && guess != null}
+                                    isFinal = {!isCurrentGuess && guess != null }
                                 />
                     })
                 }
             </div> 
+
+            <Keyboard usedLetters={usedLetters}/>
 
             <button 
                 className='bg-[#538d4e] w-30 h-10 -translate-x-5 -translate-y-5 rounded-2xl text-white hover:cursor-pointer'
@@ -97,12 +130,7 @@ export const Board = () => {
 
             {!trial && (
                 <div className="h-10 lg:text-[20px] -translate-x-5 btranslate-y-5 w-full text-xl font-bold text-white flex justify-center mt-5">
-                    <div>Correct Word is : <span className="uppercase">{solution}</span></div>
-                </div>
-            )}
-            {isGameOver && (
-                <div className="h-10 w-full text-4xl -translate-x-5 -translate-y-5 font-bold flex text-white justify-center mt-5">
-                    <div>Good Job !! Sybau🥀</div>
+                    <div>Correct Word was : <span className="uppercase">{solution}</span></div>
                 </div>
             )}
 
