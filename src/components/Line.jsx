@@ -16,7 +16,7 @@ export const Line = ({guess , solution , isFinal}) => {
     }
 
     return(
-        <div className="h-12 w-80 flex gap-1">
+        <div className="h-9 lg:h-12 flex gap-1">
             {cells}
         </div>
     )

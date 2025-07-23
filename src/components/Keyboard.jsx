@@ -10,9 +10,9 @@ export const Keyboard = ({ usedLetters, onKeyClick }) => {
 
     const getKeyStyle = (key) => {
         if (key === 'ENTER' || key === 'BACKSPACE') {
-            return 'w-16 h-13 mt-3' 
+            return 'w-12 h-9 lg:w-16 lg:h-13 mt-3' 
         }
-        return 'w-10 h-13'
+        return 'w-6 h-9 lg:w-10 lg:h-13'
     }
 
 
@@ -40,24 +40,26 @@ export const Keyboard = ({ usedLetters, onKeyClick }) => {
     }
 
     return (
-        <div className="flex flex-col transform md:scale-100 lg:scale-125 gap-2 -translate-y-20 -translate-x-5">
-            {KEYBOARD_ROWS.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex gap-1 justify-center">
-                    {row.map((key) => (
-                        <button
-                            key={key}
-                            onClick={() => handleClick(key)}
-                            className={clsx(
-                                getKeyStyle(key),
-                                getKeyColor(key),
-                                "flex justify-center items-center text-white rounded-md uppercase font-bold text-sm cursor-pointer transition-colors duration-200"
-                            )}
-                        >
-                            {key === 'BACKSPACE' ? '⌫' : key}
-                        </button>
-                    ))}
-                </div>
-            ))}
+        <div className="w-full flex justify-center items-center">
+            <div className="flex flex-col gap-2 w-fit">
+                {KEYBOARD_ROWS.map((row, rowIndex) => (
+                    <div key={rowIndex} className="flex gap-1 justify-center">
+                        {row.map((key) => (
+                            <button
+                                key={key}
+                                onClick={() => handleClick(key)}
+                                className={clsx(
+                                    getKeyStyle(key),
+                                    getKeyColor(key),
+                                    "flex justify-center items-center text-white rounded-md uppercase font-bold text-sm cursor-pointer transition-colors duration-200"
+                                )}
+                            >
+                                {key === 'BACKSPACE' ? '⌫' : key}
+                            </button>
+                        ))}
+                    </div>
+                ))}
+            </div>
         </div>  
     )
 }

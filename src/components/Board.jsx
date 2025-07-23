@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Line } from "./Line"
 import { Keyboard } from "./Keyboard"
 
-export const Board = () => {
+export const Board = ({fn}) => {
 
     const isLetter = useCallback((char)=>{
         const code = char.charCodeAt(0);
@@ -10,10 +10,10 @@ export const Board = () => {
     } , [])
 
     const [solution , setSolution] = useState('')
-    const[guesses , setGuesses] = useState(new Array(5).fill(null))
+    const[guesses , setGuesses] = useState(new Array(6).fill(null))
     const[currentGuess , setCurrentGuess] = useState('')
     const [isGameOver , setIsGameOver] = useState(false)
-    const [trial , setTrial] = useState(5)
+    const [trial , setTrial] = useState(6)
     const [usedLetters, setUsedLetters] = useState({}) // New state for tracking used letters
 
     const updateUsedLetters = useCallback((guess, solution) => {
@@ -126,13 +126,16 @@ export const Board = () => {
     //     }
     //     console.log(trial)
     // },[guesses])
+    if(!trial){
+        fn(solution.toUpperCase())
+    }
 
     return(
-        <div className="h-full w-1/2 flex flex-col justify-center items-center">
+        <div className="h-full w-1/2 flex flex-col justify-center items-center gap-4">
 
-      <div className = 'font-[JetBrainsMono] -translate-x-5 -translate-y-5 text-[#b59f3b]  text-[50px]'> Wordle </div>
+            <div className = 'flex justify-center font-[JetBrainsMono] text-[#b59f3b] text-2xl lg:text-[50px]'> Wordle </div>
 
-            <div className="h-93 w-80 flex flex-col gap-3 mb-10">
+            <div className="w-fit lg:h-93 flex flex-col gap-1 lg:gap-3 mb-4 lg:mb-10">
                 {
                     guesses.map((guess , i)=>{
                         const isCurrentGuess = i === guesses.findIndex(val => val == null)
@@ -148,18 +151,16 @@ export const Board = () => {
             onKeyClick={handleKeyboardClick}/>
 
             <button 
-                className='bg-[#6a6a6a] w-30 h-10 -translate-x-5 -translate-y-5 rounded-2xl text-white hover:cursor-pointer'
+                className='bg-[#6a6a6a] w-22 h-8 sm:h-8 text-sm sm:text-sm lg:text-xl lg:w-30 lg:h-10 rounded-2xl text-white hover:cursor-pointer mb-2'
                 onClick={()=>window.location.reload(true)}
                 >Play Again!
             </button>
 
-            {!trial && (
-                <div className="h-10 lg:text-[20px] -translate-x-5 btranslate-y-5 w-full text-xl font-bold text-white flex justify-center mt-5">
+            {/* {!trial && (
+                <div className="h-10 lg:text-[20px] w-full text-xl font-bold text-white flex justify-center mt-5">
                     <div>Word : <span className="uppercase">{solution}</span></div>
                 </div>
-            )}
-
-       
+            )} */}
         </div>
     )
 }
