@@ -18,6 +18,9 @@ export const Board = ({fn}) => {
     const [isGameOver , setIsGameOver] = useState(false)
     const [trial , setTrial] = useState(6)
     const [usedLetters, setUsedLetters] = useState({}) // New state for tracking used letters
+    const [shouldAnimate , setShouldAnimate] = useState(false)
+    const [exist , setExist] = useState(false)
+    const [animationKey , setAnimationKey] = useState(0)
 
     const updateUsedLetters = useCallback((guess, solution) => {
         const newUsedLetters = { ...usedLetters }
@@ -44,16 +47,33 @@ export const Board = ({fn}) => {
         setUsedLetters(newUsedLetters)
     }, [usedLetters])
 
+    const handleExistsorNot = useCallback(async (arg) => {
+        const exists = await fetch(`https://cfwordleserver.shubhamthesingh21.workers.dev/word/exists/${arg}`)
+        // console.log(`https://cfwordleserver.shubhamthesingh21.workers.dev/word/exists/${arg}`)
+        const finalRes = await exists.json()
+        // console.log(JSON.stringify(finalRes))
+        if(!finalRes.res){
+            setAnimationKey(prev => prev + 1)
+            setShouldAnimate(true)
+        }else{
+            setShouldAnimate(false)
+        }
 
+        return finalRes.res
+    } , [])
 
-    const handleKeyboardClick = (key) => {
+    const handleKeyboardClick = async(key) => {
     if (isGameOver) return
     
     if (key === 'BACKSPACE') {
         setCurrentGuess(currentGuess.slice(0, -1))
     } else if (key === 'ENTER') {
-        if (currentGuess.length !== 5) return
+        if(currentGuess.length !== 5) return;
+
+        const exists = await handleExistsorNot(currentGuess);
+        if (!exists) return;
         
+        setExist(exists)
         const newGuesses = [...guesses]
         newGuesses[guesses.findIndex((val) => val == null)] = currentGuess
         setGuesses(newGuesses)
@@ -72,7 +92,8 @@ export const Board = ({fn}) => {
 
 
     useEffect(()=>{
-        const handleKey = (e) => {
+        const handleKey = async(e) => {
+                // console.log(e.key)
 
             if(isGameOver){
                 return
@@ -80,13 +101,18 @@ export const Board = ({fn}) => {
 
             if(e.key == "Backspace"){
                 // console.log("pressed")
-                return setCurrentGuess(currentGuess.slice(0,-1))
+                e.preventDefault()
+                setCurrentGuess(currentGuess.slice(0,-1))
+                return
             }
 
             if(e.key === "Enter"){
-                if(currentGuess.length != 5){
-                    return
-                }
+                if(currentGuess.length !== 5) return;
+
+                const exists = await handleExistsorNot(currentGuess);
+                if (!exists) return;
+
+                setExist(exists)
                 const newGuesses = [...guesses]
                 newGuesses[guesses.findIndex((val)=> val==null)] = currentGuess
                 setGuesses(newGuesses)
@@ -97,6 +123,7 @@ export const Board = ({fn}) => {
                 if(isCorrect){
                     setIsGameOver(true)
                 }
+                // console.log(guesses)
             }
 
             // if(!AlPHABETS.includes(e.key.toLowerCase())){
@@ -105,7 +132,7 @@ export const Board = ({fn}) => {
             // console.log(e.key)
             // console.log(AlPHABETS.includes(e.key.toLowerCase()))
             if (currentGuess.length < 5 && AlPHABETS.includes(e.key.toLowerCase())) {
-                console.log(e.key)
+                // console.log(e.key)
                 setCurrentGuess(prev => prev + e.key);
             }
             
@@ -149,7 +176,10 @@ export const Board = ({fn}) => {
                         const isCurrentGuess = i === guesses.findIndex(val => val == null)
                         return <Line key={i} guess={ isCurrentGuess ? currentGuess : guess ?? ''}
                                     solution={solution}
-                                    isFinal = {!isCurrentGuess && guess != null }
+                                    isFinal = {!isCurrentGuess && guess != null && exist }
+                                    isCurrent={isCurrentGuess}
+                                    shouldAnimate={shouldAnimate}
+                                    animationKey={animationKey}
                                 />
                     })
                 }
