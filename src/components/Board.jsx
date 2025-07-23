@@ -2,12 +2,15 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Line } from "./Line"
 import { Keyboard } from "./Keyboard"
 
+const ALPHA_STRING = 'abcdefghijklmnopqrstuvwxyz'
+const AlPHABETS = ALPHA_STRING.split('')
+
 export const Board = ({fn}) => {
 
-    const isLetter = useCallback((char)=>{
-        const code = char.charCodeAt(0);
-        return (code >= 65 && code <= 90) || (code >= 97 && code <= 122)
-    } , [])
+    // const isLetter = useCallback((char)=>{
+    //     const code = char.charCodeAt(0);
+    //     return (code >= 65 && code <= 90) || (code >= 97 && code <= 122)
+    // } , [])
 
     const [solution , setSolution] = useState('')
     const[guesses , setGuesses] = useState(new Array(6).fill(null))
@@ -96,8 +99,13 @@ export const Board = ({fn}) => {
                 }
             }
 
-            if (currentGuess.length < 5 && isLetter(e.key)) {
-                // console.log(e.key)
+            // if(!AlPHABETS.includes(e.key.toLowerCase())){
+            //     return
+            // }
+            // console.log(e.key)
+            // console.log(AlPHABETS.includes(e.key.toLowerCase()))
+            if (currentGuess.length < 5 && AlPHABETS.includes(e.key.toLowerCase())) {
+                console.log(e.key)
                 setCurrentGuess(prev => prev + e.key);
             }
             
@@ -133,7 +141,7 @@ export const Board = ({fn}) => {
     return(
         <div className="h-full w-1/2 flex flex-col justify-center items-center gap-4">
 
-            <div className = 'flex justify-center font-[JetBrainsMono] text-[#b59f3b] text-2xl lg:text-[50px]'> Wordle </div>
+            <div className = 'flex justify-center text-[#b59f3b] text-2xl lg:text-[50px]'> Wordle </div>
 
             <div className="w-fit lg:h-93 flex flex-col gap-1 lg:gap-3 mb-4 lg:mb-10">
                 {
@@ -151,7 +159,7 @@ export const Board = ({fn}) => {
             onKeyClick={handleKeyboardClick}/>
 
             <button 
-                className='bg-[#6a6a6a] w-22 h-8 sm:h-8 text-sm sm:text-sm lg:text-xl lg:w-30 lg:h-10 rounded-2xl text-white hover:cursor-pointer mb-2'
+                className='bg-[#6a6a6a] w-22 h-8 sm:h-8 text-sm sm:text-sm lg:text-lg lg:w-30 lg:h-10 rounded-2xl text-white hover:cursor-pointer mb-2'
                 onClick={()=>window.location.reload(true)}
                 >Play Again!
             </button>
