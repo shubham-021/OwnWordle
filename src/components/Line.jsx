@@ -1,7 +1,8 @@
+import React from "react"
 import { motion } from "motion/react"
 import { Cell } from "./Cell"
 
-export const Line = ({guess , solution , isFinal , isCurrent , shouldAnimate , animationKey}) => {
+const LineComponent = ({guess , solution , isFinal , isCurrent , shouldAnimate , animationKey}) => {
 
     // const finalAnimationProps = isFinal
     //     ? {
@@ -39,3 +40,17 @@ export const Line = ({guess , solution , isFinal , isCurrent , shouldAnimate , a
         </motion.div>
     )
 }
+
+const areEqual = (prev, next) => {
+  return (
+    prev.guess === next.guess &&
+    prev.solution === next.solution &&
+    prev.isFinal === next.isFinal &&
+    prev.isCurrent === next.isCurrent &&
+    prev.shouldAnimate === next.shouldAnimate &&
+    prev.animationKey === next.animationKey
+  );
+};
+
+
+export const Line = React.memo(LineComponent , areEqual)
