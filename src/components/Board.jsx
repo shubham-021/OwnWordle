@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Line } from "./Line"
 import { Keyboard } from "./Keyboard"
+import { fiveLetterWords } from "../words/validwords"
+import { validWords } from "../words/wordsProvider"
 
 const ALPHA_STRING = 'abcdefghijklmnopqrstuvwxyz'
 const AlPHABETS = ALPHA_STRING.split('')
@@ -48,18 +50,15 @@ export const Board = ({fn}) => {
     }, [usedLetters])
 
     const handleExistsorNot = useCallback(async (arg) => {
-        const exists = await fetch(`https://cfwordleserver.shubhamthesingh21.workers.dev/word/exists/${arg}`)
-        // console.log(`https://cfwordleserver.shubhamthesingh21.workers.dev/word/exists/${arg}`)
-        const finalRes = await exists.json()
-        // console.log(JSON.stringify(finalRes))
-        if(!finalRes.res){
+        const exists = validWords.has(arg)
+        if(!exists){
             setAnimationKey(prev => prev + 1)
             setShouldAnimate(true)
         }else{
             setShouldAnimate(false)
         }
 
-        return finalRes.res
+        return exists
     } , [])
 
     const handleKeyboardClick = async(key) => {
@@ -144,11 +143,9 @@ export const Board = ({fn}) => {
     
     useEffect(()=>{
         const fetchWord = async()=>{
-            const id = Math.floor(Math.random()*350)
-            const res = await fetch(`https://cfwordleserver.shubhamthesingh21.workers.dev/word/${id}`)
-            const finalRes = await res.json()
-            const word = finalRes.word
-            
+            // console.log(fiveLetterWords.length)
+            const index = Math.floor(Math.random()*2309)
+            const word = fiveLetterWords[index]
             setSolution(word)
         }
 

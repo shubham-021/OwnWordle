@@ -22,7 +22,9 @@ const LineComponent = ({guess , solution , isFinal , isCurrent , shouldAnimate ,
                                 includes : solution[i] != letter && solution.includes(letter),
                                 incorrect : solution[i] != letter && !solution.includes(letter)
                             }
-                         )}>{letter}</Cell>)
+                         )}
+                         isFinal={isFinal}
+                         >{letter}</Cell>)
     }
 
     return(
