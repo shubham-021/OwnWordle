@@ -188,11 +188,15 @@ export const Board = ({fn}) => {
             <Keyboard usedLetters={usedLetters} 
             onKeyClick={handleKeyboardClick}/>
 
-            <button 
-                className='bg-[#6a6a6a] w-22 h-8 sm:h-8 text-sm sm:text-sm lg:text-lg lg:w-30 lg:h-10 rounded-2xl text-white hover:cursor-pointer mb-2'
-                onClick={()=>window.location.reload(true)}
-                >Play Again!
-            </button>
+            
+            {!trial && (
+                <button 
+                    className='bg-[#6a6a6a] w-22 h-8 sm:h-8 text-sm sm:text-sm lg:text-lg lg:w-30 lg:h-10 rounded-2xl text-white hover:cursor-pointer mb-2'
+                    onClick={()=>window.location.reload(true)}
+                    >Play Again!
+                </button>
+            )}
+
 
             {/* {!trial && (
                 <div className="h-10 lg:text-[20px] w-full text-xl font-bold text-white flex justify-center mt-5">
