@@ -16,6 +16,7 @@ export const Cell = React.memo(({ children, correct, incorrect, includes, isFina
       triggeredOnce.current = true;
     }
   }, [isFinal]);
+  // console.log("Cell ->")
 
   return (
     <motion.div
@@ -34,15 +35,5 @@ export const Cell = React.memo(({ children, correct, incorrect, includes, isFina
       {children}
     </motion.div>
   );
-} , areEqual);
-
-function areEqual(prev, next) {
-  return (
-    prev.children === next.children &&
-    prev.correct === next.correct &&
-    prev.incorrect === next.incorrect &&
-    prev.includes === next.includes &&
-    prev.isFinal === next.isFinal
-  );
-}
+});
 

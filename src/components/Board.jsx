@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { Line } from "./Line"
 import { Keyboard } from "./Keyboard"
 import { fiveLetterWords } from "../words/validwords"
 import { validWords } from "../words/wordsProvider"
+import { solutionContext } from "../context/solution"
 
 const ALPHA_STRING = 'abcdefghijklmnopqrstuvwxyz'
 const AlPHABETS = ALPHA_STRING.split('')
@@ -14,7 +15,7 @@ export const Board = ({fn}) => {
     //     return (code >= 65 && code <= 90) || (code >= 97 && code <= 122)
     // } , [])
 
-    const [solution , setSolution] = useState('')
+    const {solution} = useContext(solutionContext)
     const[guesses , setGuesses] = useState(new Array(6).fill(null))
     const[currentGuess , setCurrentGuess] = useState('')
     const [isGameOver , setIsGameOver] = useState(false)
@@ -49,7 +50,7 @@ export const Board = ({fn}) => {
         setUsedLetters(newUsedLetters)
     }, [usedLetters])
 
-    const handleExistsorNot = useCallback(async (arg) => {
+    const handleExistsorNot = useCallback((arg) => {
         const exists = validWords.has(arg)
         if(!exists){
             setAnimationKey(prev => prev + 1)
@@ -61,7 +62,7 @@ export const Board = ({fn}) => {
         return exists
     } , [])
 
-    const handleKeyboardClick = async(key) => {
+    const handleKeyboardClick = (key) => {
     if (isGameOver) return
     
     if (key === 'BACKSPACE') {
@@ -69,7 +70,7 @@ export const Board = ({fn}) => {
     } else if (key === 'ENTER') {
         if(currentGuess.length !== 5) return;
 
-        const exists = await handleExistsorNot(currentGuess);
+        const exists = handleExistsorNot(currentGuess);
         if (!exists) return;
         
         setExist(exists)
@@ -91,7 +92,7 @@ export const Board = ({fn}) => {
 
 
     useEffect(()=>{
-        const handleKey = async(e) => {
+        const handleKey = (e) => {
                 // console.log(e.key)
 
             if(isGameOver){
@@ -107,10 +108,10 @@ export const Board = ({fn}) => {
 
             if(e.key === "Enter"){
                 if(currentGuess.length !== 5) return;
-
-                const exists = await handleExistsorNot(currentGuess);
+                // console.log(animationKey)
+                const exists = handleExistsorNot(currentGuess);
                 if (!exists) return;
-
+                // console.log(exists)
                 setExist(exists)
                 const newGuesses = [...guesses]
                 newGuesses[guesses.findIndex((val)=> val==null)] = currentGuess
@@ -141,16 +142,16 @@ export const Board = ({fn}) => {
         return ()=>{window.removeEventListener('keydown' , handleKey)}
     },[currentGuess , isGameOver , solution, updateUsedLetters])
     
-    useEffect(()=>{
-        const fetchWord = async()=>{
-            // console.log(fiveLetterWords.length)
-            const index = Math.floor(Math.random()*2309)
-            const word = fiveLetterWords[index]
-            setSolution(word)
-        }
+    // useEffect(()=>{
+    //     const fetchWord = ()=>{
+    //         // console.log(fiveLetterWords.length)
+    //         const index = Math.floor(Math.random()*2309)
+    //         const word = fiveLetterWords[index]
+    //         setSolution(word)
+    //     }
 
-        fetchWord()
-    },[])
+    //     fetchWord()
+    // },[])
 
     // useEffect(()=>{
     //     if(!guesses.includes(null)){
@@ -172,7 +173,6 @@ export const Board = ({fn}) => {
                     guesses.map((guess , i)=>{
                         const isCurrentGuess = i === guesses.findIndex(val => val == null)
                         return <Line key={i} guess={ isCurrentGuess ? currentGuess : guess ?? ''}
-                                    solution={solution}
                                     isFinal = {!isCurrentGuess && guess != null && exist }
                                     isCurrent={isCurrentGuess}
                                     shouldAnimate={shouldAnimate}

@@ -1,8 +1,9 @@
-import React from "react"
-import { motion } from "motion/react"
+import React, { useContext, useEffect } from "react"
+import { motion, useAnimation } from "motion/react"
 import { Cell } from "./Cell"
+import { solutionContext } from "../context/solution"
 
-const LineComponent = ({guess , solution , isFinal , isCurrent , shouldAnimate , animationKey}) => {
+export const Line = ({guess , isFinal , isCurrent , shouldAnimate , animationKey}) => {
 
     // const finalAnimationProps = isFinal
     //     ? {
@@ -11,6 +12,18 @@ const LineComponent = ({guess , solution , isFinal , isCurrent , shouldAnimate ,
     //         transition: { duration: 0.5 },
     //         }
     //     : {};
+    const {solution} = useContext(solutionContext)
+    // console.log(solution)
+    const controls = useAnimation()
+
+    useEffect(() => {
+        if (isCurrent && shouldAnimate) {
+            controls.start({
+                x: [0, -20, 20, -20, 0],
+                transition: { duration: 0.3 }
+            })
+        }
+    }, [shouldAnimate, isCurrent, controls , animationKey])
 
     const cells = []
     for(let i=0; i<5; i++){
@@ -26,33 +39,20 @@ const LineComponent = ({guess , solution , isFinal , isCurrent , shouldAnimate ,
                          isFinal={isFinal}
                          >{letter}</Cell>)
     }
+    // console.log("Line ->")
+    // console.log("animationKey -> " , animationKey)
+    // console.log("shouldAnimate -> " , shouldAnimate)
+    // console.log("isCurrent -> " , isCurrent)
+    // useEffect(() => {
+    //     console.log("animationKey changed →", animationKey);
+    // }, [animationKey]);
 
     return(
         <motion.div
             className="h-9 lg:h-12 flex gap-1"
-            key={animationKey}
-            animate={
-                isCurrent && shouldAnimate 
-                ? { x: [0, -20, 20, -20, 0] } 
-                : { x: 0 }
-            }
-            transition={{ duration: 0.3 }}
+            animate={controls}
         >
             {cells}
         </motion.div>
     )
 }
-
-const areEqual = (prev, next) => {
-  return (
-    prev.guess === next.guess &&
-    prev.solution === next.solution &&
-    prev.isFinal === next.isFinal &&
-    prev.isCurrent === next.isCurrent &&
-    prev.shouldAnimate === next.shouldAnimate &&
-    prev.animationKey === next.animationKey
-  );
-};
-
-
-export const Line = React.memo(LineComponent , areEqual)
