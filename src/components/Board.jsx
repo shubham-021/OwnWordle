@@ -164,7 +164,7 @@ export const Board = ({fn}) => {
     }
 
     return(
-        <div className="h-full w-full sm:w-1/2 flex flex-col justify-center items-center gap-2">
+        <div className="h-fit w-fit sm:h-full sm:w-1/2 flex flex-col justify-center items-center gap-2 -translate-y-15 sm:-translate-y-0">
 
             <div className = 'flex justify-center text-[#b59f3b] text-5xl lg:text-[50px] font-bold -translate-y-5'> Wordle </div>
 

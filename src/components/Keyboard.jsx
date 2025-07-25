@@ -40,7 +40,7 @@ export const Keyboard = ({ usedLetters, onKeyClick }) => {
     }
 
     return (
-        <div className="w-full flex justify-center items-center px-2">
+        <div className="w-full flex justify-center items-center px-2 translate-y-5 sm:translate-y-0">
             <div className="flex flex-col gap-2 w-full">
                 {KEYBOARD_ROWS.map((row, rowIndex) => (
                     <div key={rowIndex} className="flex gap-1 justify-center w-full">
