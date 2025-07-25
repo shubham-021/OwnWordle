@@ -49,7 +49,7 @@ export const Line = ({guess , isFinal , isCurrent , shouldAnimate , animationKey
 
     return(
         <motion.div
-            className="h-9 lg:h-12 flex gap-1"
+            className="h-12 lg:h-12 flex gap-1"
             animate={controls}
         >
             {cells}

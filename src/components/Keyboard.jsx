@@ -12,7 +12,7 @@ export const Keyboard = ({ usedLetters, onKeyClick }) => {
         if (key === 'ENTER' || key === 'BACKSPACE') {
             return 'w-12 h-9 lg:w-16 lg:h-13 mt-3' 
         }
-        return 'w-6 h-9 lg:w-10 lg:h-13'
+        return 'w-8 h-9 lg:w-10 lg:h-13'
     }
 
 
@@ -40,10 +40,10 @@ export const Keyboard = ({ usedLetters, onKeyClick }) => {
     }
 
     return (
-        <div className="w-full flex justify-center items-center">
-            <div className="flex flex-col gap-2 w-fit">
+        <div className="w-full flex justify-center items-center px-2">
+            <div className="flex flex-col gap-2 w-full">
                 {KEYBOARD_ROWS.map((row, rowIndex) => (
-                    <div key={rowIndex} className="flex gap-1 justify-center">
+                    <div key={rowIndex} className="flex gap-1 justify-center w-full">
                         {row.map((key) => (
                             <button
                                 key={key}

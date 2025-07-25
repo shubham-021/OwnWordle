@@ -29,7 +29,7 @@ export const Cell = React.memo(({ children, correct, incorrect, includes, isFina
           "bg-[#2a2a2a]": incorrect,
           "bg-[#b59f3b]": includes
         },
-        "h-9 w-9 lg:h-13 lg:w-13 flex justify-center items-center text-neutral-200 border-2 rounded-md sm:rounded-xl border-neutral-600 uppercase"
+        "h-12 w-12 lg:h-13 lg:w-13 flex justify-center items-center text-neutral-200 border-2 border-neutral-600 uppercase"
       )}
     >
       {children}
