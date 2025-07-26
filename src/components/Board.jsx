@@ -186,7 +186,7 @@ export const Board = ({fn}) => {
             onKeyClick={handleKeyboardClick}/>
 
             
-            {true && (
+            {!trial && (
                 <button 
                     className='bg-[#6a6a6a] w-22 h-8 sm:h-8 text-sm sm:text-sm lg:text-lg lg:w-30 lg:h-10 rounded-2xl text-white hover:cursor-pointer mb-2 absolute -bottom-20 sm:bottom-10 lg:bottom-2'
                     onClick={()=>window.location.reload(true)}
