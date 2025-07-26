@@ -164,7 +164,7 @@ export const Board = ({fn}) => {
     }
 
     return(
-        <div className="h-fit w-fit sm:h-full sm:w-1/2 flex flex-col justify-center items-center gap-2 -translate-y-15 sm:-translate-y-0">
+        <div className="h-fit w-fit sm:h-full sm:w-1/2 flex flex-col justify-center items-center gap-2 -translate-y-15 sm:-translate-y-0 relative">
 
             <div className = 'flex justify-center text-[#b59f3b] text-5xl lg:text-[50px] font-bold -translate-y-5'> Wordle </div>
 
@@ -186,9 +186,9 @@ export const Board = ({fn}) => {
             onKeyClick={handleKeyboardClick}/>
 
             
-            {!trial && (
+            {true && (
                 <button 
-                    className='bg-[#6a6a6a] w-22 h-8 sm:h-8 text-sm sm:text-sm lg:text-lg lg:w-30 lg:h-10 rounded-2xl text-white hover:cursor-pointer mb-2'
+                    className='bg-[#6a6a6a] w-22 h-8 sm:h-8 text-sm sm:text-sm lg:text-lg lg:w-30 lg:h-10 rounded-2xl text-white hover:cursor-pointer mb-2 absolute -bottom-20 sm:bottom-10 lg:bottom-2'
                     onClick={()=>window.location.reload(true)}
                     >Play Again!
                 </button>
